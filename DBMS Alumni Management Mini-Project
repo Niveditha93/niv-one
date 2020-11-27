@@ -1,0 +1,533 @@
+from flask import Flask, render_template, request
+import cx_Oracle
+app = Flask(__name__)
+
+
+@app.route("/success/<name>")
+def success(name):
+    return "login successful !!! Welcome %s" %(name)
+
+
+@app.route("/", methods=["GET", "POST"])
+def home():
+    return render_template("1.introduction1.html")
+
+
+@app.route("/hello")
+def hello():
+    return render_template("2.hello.html")
+
+
+@app.route("/back1")
+def back1():
+    return render_template("1.introduction1.html")
+
+
+@app.route("/back2")
+def back2():
+    return render_template("2.hello.html")
+
+
+@app.route("/back3")
+def back3():
+    return render_template("3.introbtn.html")
+
+
+@app.route("/back4")
+def back4():
+    return render_template("4.insertbtnform.html")
+
+
+@app.route("/back5")
+def back5():
+    return render_template("4.insertbtnform.html")
+
+
+@app.route("/back6")
+def back6():
+    return render_template("4.insertbtnform.html")
+
+
+@app.route("/back7")
+def back7():
+    return render_template("4.insertbtnform.html")
+
+
+@app.route("/back8")
+def back8():
+    return render_template("4.insertbtnform.html")
+
+@app.route("/back9")
+def back9():
+    return render_template("3.introbtn.html")
+
+
+@app.route("/back10")
+def back10():
+    return render_template("5.updatebtnform.html")
+
+
+@app.route("/back11")
+def back11():
+    return render_template("search.html")
+
+
+@app.route("/login", methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        user = request.form['userid']
+        pwd = request.form['pwd']
+        if user == "system" and pwd == "123456":
+            return render_template('3.introbtn.html')
+            #return redirect(url_for('success',name=user))
+        else:
+            return "Login Failed Try again!!"
+    else:
+        user=request.args.get('userid')
+        pwd=request.args.get('pwd')
+        if user == " system" and pwd == "123456":
+            return render_template('2.hello.html')
+        else:
+            return render_template('loginfailed.html')
+
+
+@app.route('/add', methods=["GET", "POST"])
+def add():
+    return render_template("4.insertbtnform.html")
+
+
+@app.route("/insdptform", methods=["GET", "POST"])
+def insdptform():
+    return render_template("02.insertionDept.html")
+
+
+@app.route('/reg', methods=["GET", "POST"])
+def indept():
+    ddid = request.form['did']
+    ddname = request.form['dname']
+    dmail = request.form['mail']
+    dphone = request.form['phone']
+    #susername = request.form['username']
+    #spassword = request.form['password']
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    query = f"insert into department values('{ddid}','{ddname}','{dmail}','{dphone}')"
+    curs.execute(query)
+    conn.commit()
+    curs.close()
+    conn.close()
+    return render_template("insertsuc.html")
+
+
+@app.route("/insaluform", methods=["GET", "POST"])
+def insaluform():
+    return render_template("01.insertionAlumni.html")
+
+
+@app.route('/reg2', methods=["GET", "POST"])
+def inalu():
+    aalid = request.form['alid']
+    ausn = request.form['usn']
+    aname = request.form['name']
+    aaddress = request.form['address']
+    amail = request.form['mail']
+    aphone = request.form['phone']
+    adid = request.form['did']
+    agradyr = request.form['graduatedyear']
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    query = f"insert into alumni values('{aalid}','{ausn}','{aname}','{aaddress}','{amail}','{aphone}','{adid}','{agradyr}')"
+    curs.execute(query)
+    conn.commit()
+    curs.close()
+    conn.close()
+    return render_template("insertsuc1.html")
+
+
+@app.route('/trigger1', methods=["GET", "POST"])
+def trigger1():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select * from alumnicount")
+    rows = curs.fetchall()
+    return render_template("dis10.html", rows=rows)
+
+
+@app.route("/inscompform", methods=["GET", "POST"])
+def inscompform():
+    return render_template("03.insertionCompany.html")
+
+
+@app.route('/reg3', methods=["GET", "POST"])
+def incomp():
+    ccid = request.form['cid']
+    ccname = request.form['cname']
+    calid = request.form['alid']
+    caddress = request.form['address']
+    cmail = request.form['mail']
+    cphone = request.form['phone']
+    #adid = request.form['did']
+    #agradyr = request.form['graduateyear']
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    query = f"insert into compy values('{ccid}','{ccname}','{calid}','{caddress}','{cmail}','{cphone}')"
+    curs.execute(query)
+    conn.commit()
+    curs.close()
+    conn.close()
+    return render_template("insertsuc.html")
+
+
+@app.route("/instrform", methods=["GET", "POST"])
+def instrform():
+    return render_template("04.insertionTranning.html")
+
+
+@app.route('/reg4', methods=["GET", "POST"])
+def intrain():
+    ttid = request.form['tid']
+    ttname = request.form['tname']
+    talid = request.form['alid']
+    taddress = request.form['address']
+    tmail = request.form['mail']
+    tphone = request.form['phone']
+    #adid = request.form['did']
+    #agradyr = request.form['graduateyear']
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    query = f"insert into train values('{ttid}','{ttname}','{talid}','{taddress}','{tmail}','{tphone}')"
+    curs.execute(query)
+    conn.commit()
+    curs.close()
+    conn.close()
+    return render_template("insertsuc.html")
+
+
+@app.route("/inshsform", methods=["GET", "POST"])
+def inshsform():
+    return render_template("05.insertionHigherStudies.html")
+
+
+@app.route('/reg5', methods=["GET", "POST"])
+def inhs():
+    hcourseid = request.form['courseid']
+    hcoursename = request.form['coursename']
+    halid = request.form['alid']
+    haddress = request.form['address']
+    hmail = request.form['mail']
+    hphone = request.form['phone']
+    #adid = request.form['did']
+    #agradyr = request.form['graduateyear']
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    query = f"insert into highstudies values('{hcourseid}','{hcoursename}','{halid}','{haddress}','{hmail}','{hphone}')"
+    curs.execute(query)
+    conn.commit()
+    curs.close()
+    conn.close()
+    return render_template("insertsuc.html")
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    return render_template("search.html")
+
+
+@app.route("/search1", methods=["GET", "POST"])
+def search1():
+    return render_template("ser.html")
+
+
+@app.route('/search2', methods=["GET", "POST"])
+def search2():
+    if request.method == 'POST':
+        ssname = request.form['dept']
+    else:
+        ssname = request.args.get('dept')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "select * from  alumni where did='%s'" % (ssname)
+    curs.execute(del_query)
+    conn.commit()
+    rows = curs.fetchall()
+    return render_template("dis2.html", rows=rows)
+
+
+@app.route("/search3", methods=["GET", "POST"])
+def search3():
+    return render_template("seryear.html")
+
+
+@app.route('/search4', methods=["GET", "POST"])
+def search4():
+    if request.method == 'POST':
+        ssyear = request.form['year']
+    else:
+        ssyear = request.args.get('year')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "select * from  alumni where graduatedyear='%d'" % (int(ssyear))
+    curs.execute(del_query)
+    conn.commit()
+    rows = curs.fetchall()
+    return render_template("dis2.html", rows=rows)
+
+
+@app.route("/searchboth", methods=["GET", "POST"])
+def searchboth():
+    return render_template("serboth.html")
+
+
+@app.route('/both', methods=["GET", "POST"])
+def both():
+    if request.method == 'POST':
+        ssyear = request.form['dept']
+        ssname = request.form['year']
+    else:
+        ssyear = request.args.get('dept')
+        ssname = request.args.get('year')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "select * from  alumni where  did='%s' and graduatedyear='%d'" % (ssname, int(ssyear))
+    curs.execute(del_query)
+    conn.commit()
+    rows = curs.fetchall()
+    return render_template("dis2.html", rows=rows)
+
+
+@app.route('/viewa', methods=["GET", "POST"])
+def viewall():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select * from alumni")
+    rows = curs.fetchall()
+    return render_template("dis2.html", rows=rows)
+
+
+@app.route('/viewd', methods=["GET", "POST"])
+def viewdept():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select * from department")
+    rows = curs.fetchall()
+    return render_template("distadpt.html", rows=rows)
+
+@app.route('/viewc', methods=["GET", "POST"])
+def viewcomp():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select * from compy")
+    rows = curs.fetchall()
+    return render_template("dis3.html", rows=rows)
+
+
+@app.route('/viewt', methods=["GET", "POST"])
+def viewtrain():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select * from train")
+    rows = curs.fetchall()
+    return render_template("dis4.html", rows=rows)
+
+
+@app.route('/viewH', methods=["GET", "POST"])
+def viewHS():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select * from highstudies")
+    rows = curs.fetchall()
+    return render_template("dis5.html", rows=rows)
+
+
+@app.route('/curstatus', methods=["GET", "POST"])
+def curstats():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select a1.alid,a1.name,a1.address,a1.mail,a1.phone,d1.dname,c1.cname "
+                 "from department d1, alumni a1, compy c1 "
+                 "where d1.did=a1.did and a1.alid=c1.alid  ")
+    rows = curs.fetchall()
+    return render_template("dis6.html", rows=rows)
+
+
+@app.route('/cur', methods=["GET", "POST"])
+def cur():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select a1.alid,a1.name,a1.address,a1.mail,a1.phone,d1.dname,t1.tname "
+                 "from department d1, alumni a1, train t1 "
+                 "where d1.did=a1.did and a1.alid=t1.alid  ")
+    rows = curs.fetchall()
+    return render_template("dis7.html", rows=rows)
+
+
+@app.route('/highs', methods=["GET", "POST"])
+def highs():
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select a1.alid,a1.name,a1.address,a1.mail,a1.phone,d1.dname,h1.coursename "
+                 "from department d1, alumni a1, highstudies h1 "
+                 "where d1.did=a1.did and a1.alid=h1.alid  ")
+    rows = curs.fetchall()
+    return render_template("dis8.html", rows=rows)
+
+
+@app.route('/update', methods=["GET", "POST"])
+def update():
+    return render_template("5.updatebtnform.html")
+
+
+@app.route('/up1', methods=["GET", "POST"])
+def up1():
+    return render_template("department.html")
+
+
+@app.route('/update2', methods=["GET", "POST"])
+def update2():
+    ualid = request.form['alid']
+    uname = request.form['name']
+    uaddress = request.form['address']
+    umail = request.form['mail']
+    uphone = request.form['phone']
+    # adid = request.form['did']
+    # agradyr = request.form['graduateyear']
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    up_query = f"update alumni set name='%s', address='%s', mail='%s', phone=%d where alid=%d" %(uname,uaddress,umail,int(uphone),int(ualid))
+    curs.execute(up_query)
+    conn.commit()
+    curs.close()
+    conn.close()
+    return render_template("usuccess.html")
+
+
+
+@app.route('/up2', methods=["GET", "POST"])
+def up2():
+    return render_template("alumni.html")
+
+
+@app.route('/up3', methods=["GET", "POST"])
+def up3():
+    return render_template("company.html")
+
+
+@app.route('/up4', methods=["GET", "POST"])
+def up4():
+    return render_template("training.html")
+
+
+@app.route('/up5', methods=["GET", "POST"])
+def up5():
+    return render_template("histudies.html")
+
+
+
+
+@app.route("/del1", methods=["GET", "POST"])
+def del1():
+    return render_template("ddepartment.html")
+
+
+@app.route("/delete1", methods=["GET", "POST"])
+def delete1():
+    if request.method == 'POST':
+        d1 = request.form['did']
+    else:
+        d1 = request.args.get('did')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "delete from department where did='%s'" % (d1)
+    curs.execute(del_query)
+    conn.commit()
+    return render_template("deleted.html")
+
+
+@app.route("/del2", methods=["GET", "POST"])
+def del2():
+    return render_template("dalumni.html")
+
+
+@app.route("/delete2", methods=["GET", "POST"])
+def delete2():
+    if request.method == 'POST':
+        d1 = request.form['alid']
+    else:
+        d1 = request.args.get('alid')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "delete from alumni where alid=%d" % (int(d1))
+    curs.execute(del_query)
+    conn.commit()
+    return render_template("deldetedal.html")
+
+
+@app.route('/dtrigger', methods=["GET", "POST"])
+def dtrigger():
+    #uudname=request.form['department']
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    curs.execute("select * from alumnicount")
+    rows = curs.fetchall()
+    return render_template("dis10.html", rows=rows)
+
+
+@app.route("/del3", methods=["GET", "POST"])
+def del3():
+    return render_template("dcompany.html")
+
+
+@app.route("/delete3", methods=["GET", "POST"])
+def delete3():
+    if request.method == 'POST':
+        c1 = request.form['cid']
+    else:
+        c1 = request.args.get('cid')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "delete from compy where cid='%s'" % c1
+    curs.execute(del_query)
+    conn.commit()
+    return render_template("deleted.html")
+
+
+@app .route("/del4", methods=["GET", "POST"])
+def del4():
+    return render_template("dtraining.html")
+
+
+@app.route("/delete4", methods=["GET", "POST"])
+def delete4():
+    if request.method == 'POST':
+        t1 = request.form['tid']
+    else:
+        t1 = request.args.get('tid')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "delete from train where cid='%s'" % t1
+    curs.execute(del_query)
+    conn.commit()
+    return render_template("deleted.html")
+
+
+@app.route("/del5", methods=["GET", "POST"])
+def del5():
+    return render_template("dhistudies.html")
+
+
+@app.route("/delete5", methods=["GET", "POST"])
+def delete5():
+    if request.method == 'POST':
+        h1 = request.form['courseid']
+    else:
+        h1 = request.args.get('courseid')
+    conn = cx_Oracle.connect("system", "123456")
+    curs = conn.cursor()
+    del_query = "delete from highstudies where courseid='%s'" % h1
+    curs.execute(del_query)
+    conn.commit()
+    return render_template("deleted.html")
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
